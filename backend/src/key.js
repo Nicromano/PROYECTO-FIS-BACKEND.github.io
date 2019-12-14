@@ -3,6 +3,6 @@ module.exports = {
         host: "localhost", 
         user: 'root', 
         password: 'pass123', 
-        database: 'Library'
+        database: 'PROYECTO_FIS'
     }
 }
