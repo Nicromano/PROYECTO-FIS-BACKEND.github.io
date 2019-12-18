@@ -21,7 +21,7 @@ router.post('/signin', async (req, res) => {
         if(data.password == helper.decrypt(data_sub.PASSWORD, data_sub.USERNAME)){
             //Contraseña correcta
             res.json({
-                res: "OK"
+                res: "OKEY"
             })
         }else{
             //Contraseña incorrecta
