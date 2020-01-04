@@ -1,13 +1,12 @@
-const { database } = require('../key');
+const { administrador, jugador } = require('../key');
 const { promisify } = require('util');
 
 const mysql = require('mysql');
 
-const pool = mysql.createPool(database);
+const pool = mysql.createPool(administrador);
 
 pool.getConnection((err, connection) => {
     if (err) {
-
         if (err.code === 'PROTOCOL_CONNECTION_LOST') {
             console.error('La conexion se ha perdido');
         }
@@ -19,7 +18,7 @@ pool.getConnection((err, connection) => {
     if (connection) {
         connection.release();
     }
-    console.log('El motor de base de datos se ha conectado a', database.database);
+    console.log('EL DBMS se ha conectado a la BD:', administrador.database);
     return;
 });
 
