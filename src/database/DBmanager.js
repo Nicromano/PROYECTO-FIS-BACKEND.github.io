@@ -1,9 +1,7 @@
-const { administrador, jugador } = require('../key');
+const { root } = require('../key');
 const { promisify } = require('util');
-
 const mysql = require('mysql');
-
-const pool = mysql.createPool(administrador);
+const pool = mysql.createPool(root);
 
 pool.getConnection((err, connection) => {
     if (err) {
@@ -18,7 +16,8 @@ pool.getConnection((err, connection) => {
     if (connection) {
         connection.release();
     }
-    console.log('EL DBMS se ha conectado a la BD:', administrador.database);
+    console.log('EL DBMS se ha conectado a la BD:', root.database);
+    console.log('Usuario:', root.user);
     return;
 });
 
