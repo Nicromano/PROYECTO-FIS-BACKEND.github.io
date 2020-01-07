@@ -58,7 +58,16 @@ router.post('/userExist', async (req, res) => {
 router.post('/signup', async (req, res) => {
     let data = req.body;
     data.password = helper.encrypt(data.password, data.username);
-    const idNickname = generate.getString(10)
+    var idNickname; 
+    let result;
+    do {
+        idNickname = generate.getString(10);
+        if(data.check){
+             result = await pool.query('SELECT ID FROM ADMINISTRADOR WHERE ID = ? ', [idNickname]);
+        }else{
+             result = await pool.query('SELECT ID FROM JUGADOR WHERE ID = ? ', [idNickname]);
+        }
+    } while (result.length == 1);
 
     const dataNickname = {
         ID: idNickname,
@@ -68,18 +77,19 @@ router.post('/signup', async (req, res) => {
         ID: idNickname,
         USERNAME: data.username,
         EMAIL: data.email,
-        PASSWORD: data.password
+        PASSWORD: data.password, 
+        ADMIN: data.check? 'SI': 'NO'
     }
+    dataUser.EMAIL = dataUser.EMAIL.toLowerCase();
     try {
-
         const sendData = await pool.query('INSERT INTO USUARIOS SET ?', [dataUser]);
-        const sendNickname = await pool.query('INSERT INTO JUGADOR SET ? ', [dataNickname]);
-
+        if(data.check){
+            const sendAdmin = await pool.query('INSERT INTO ADMINISTRADOR SET ?', [dataNickname]);
+        }else{
+            const sendJugador = await pool.query('INSERT INTO JUGADOR SET ? ', [dataNickname]);
+        }
     } catch (er) {
-        res.json({
-            res: 'ERROR',
-            error: er
-        })
+        console.log(er);
 
     }
     res.json({
