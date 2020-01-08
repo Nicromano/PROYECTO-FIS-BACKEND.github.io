@@ -13,7 +13,7 @@ router.post('/signin', async (req, res) => {
     let data = req.body;
 
     
-    const response = await pool.query('SELECT * FROM USUARIOS WHERE USERNAME = ? ', [data.username])
+    const response = await pool.query('SELECT * FROM USUARIOS WHERE UPPER(USERNAME) = ? ', [data.username.toLowerCase()])
     if (response.length == 1) {
         //Existe el usuario
         const data_sub = response[0];
@@ -39,7 +39,7 @@ router.post('/signin', async (req, res) => {
 router.post('/userExist', async (req, res) => {
     const data = req.body;
     try {
-        const consulta = await pool.query('SELECT * FROM USUARIOS WHERE USERNAME = ? OR EMAIL = ?', [data.username, data.username])
+        const consulta = await pool.query('SELECT * FROM USUARIOS WHERE UPPER(USERNAME) = ? OR UPPER(EMAIL) = ?', [data.username.toLowerCase(), data.username.toLowerCase()]);
         if (consulta.length == 1) {
             //Existe el usuario
             res.json({
