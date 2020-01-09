@@ -54,6 +54,23 @@ router.post('/userExist', async (req, res) => {
         console.log(e)
     }
 
+});
+
+router.post('/consultData',  async (req, res)=>{
+    let data = req.body;
+    try{
+        const consult = await pool.query('SELECT * FROM USUARIOS WHERE UPPER(username) = ?', [data.username.toLowerCase()]);
+        const consultDef = consult[0];
+        console.log(consult);
+        res.json({
+            ID: consultDef.ID, 
+            USERNAME: consultDef.USERNAME, 
+            EMAIL: consultDef.EMAIL, 
+            ADMIN: consultDef.ADMIN
+        });
+    }catch(e){
+        console.log(e);
+    }
 })
 router.post('/signup', async (req, res) => {
     let data = req.body;
@@ -68,7 +85,7 @@ router.post('/signup', async (req, res) => {
              result = await pool.query('SELECT ID FROM JUGADOR WHERE ID = ? ', [idNickname]);
         }
     } while (result.length == 1);
-
+    result = null;
     const dataNickname = {
         ID: idNickname,
         NICKNAME: data.username
