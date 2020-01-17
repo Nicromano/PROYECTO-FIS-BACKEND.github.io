@@ -3,7 +3,7 @@ const helper = require('../helper/crypto');
 const generate = require('../helper/genarateString');
 const router = express.Router();
 const pool = require('../database/DBmanager');
-
+const User = require('../components/usuario');
 router.get('/', (req, res) => {
     res.send({
         res: "hola"
@@ -11,30 +11,12 @@ router.get('/', (req, res) => {
 })
 router.post('/signin', async (req, res) => {
     let data = req.body;
+    usuario = new User();
+    usuario.setNombre(data.username);
+    usuario.setContrasena(data.password);
+    const result = await usuario.autenticarUsuario();
+    res.json(result);
 
-    
-    const response = await pool.query('SELECT * FROM USUARIOS WHERE UPPER(USERNAME) = ? ', [data.username.toLowerCase()])
-    if (response.length == 1) {
-        //Existe el usuario
-        const data_sub = response[0];
-        if (data.password == helper.decrypt(data_sub.PASSWORD, data_sub.USERNAME)) {
-            //Contraseña correcta
-            res.json({
-                res: "OK"
-            })
-        } else {
-            //Contraseña incorrecta
-            res.json({
-                res: "INCORRECT_PASSWORD"
-            })
-        }
-    }
-    else {
-        //No existe el usuario
-        res.json({
-            res: "NOT_EXIST"
-        })
-    }
 })
 router.post('/userExist', async (req, res) => {
     const data = req.body;
@@ -55,62 +37,42 @@ router.post('/userExist', async (req, res) => {
     }
 
 });
+router.post('/sendImg', (req, res) => {
 
-router.post('/consultData',  async (req, res)=>{
+    console.log(req.body);
+
+})
+router.post('/consultData', async (req, res) => {
     let data = req.body;
-    try{
+    usuario = new User();
+    usuario.setNombre(data.username);
+    const result =  await usuario.consultarUsuario();
+    res.json(result);
+
+    /* try {
         const consult = await pool.query('SELECT * FROM USUARIOS WHERE UPPER(username) = ?', [data.username.toLowerCase()]);
         const consultDef = consult[0];
         console.log(consult);
         res.json({
-            ID: consultDef.ID, 
-            USERNAME: consultDef.USERNAME, 
-            EMAIL: consultDef.EMAIL, 
-            ADMIN: consultDef.ADMIN
+            ID: consultDef.ID,
+            USERNAME: consultDef.USERNAME,
+            EMAIL: consultDef.EMAIL,
+            ADMIN: consultDef.ADMIN,
+            IMG: consultDef.IMG
         });
-    }catch(e){
+    } catch (e) {
         console.log(e);
-    }
+    } */
 })
 router.post('/signup', async (req, res) => {
     let data = req.body;
-    data.password = helper.encrypt(data.password, data.username);
-    var idNickname; 
-    let result;
-    do {
-        idNickname = generate.getString(10);
-        if(data.check){
-             result = await pool.query('SELECT ID FROM ADMINISTRADOR WHERE ID = ? ', [idNickname]);
-        }else{
-             result = await pool.query('SELECT ID FROM JUGADOR WHERE ID = ? ', [idNickname]);
-        }
-    } while (result.length == 1);
-    result = null;
-    const dataNickname = {
-        ID: idNickname,
-        NICKNAME: data.username
-    }
-    const dataUser = {
-        ID: idNickname,
-        USERNAME: data.username,
-        EMAIL: data.email,
-        PASSWORD: data.password, 
-        ADMIN: data.check? 'SI': 'NO'
-    }
-    dataUser.EMAIL = dataUser.EMAIL.toLowerCase();
-    try {
-        const sendData = await pool.query('INSERT INTO USUARIOS SET ?', [dataUser]);
-        if(data.check){
-            const sendAdmin = await pool.query('INSERT INTO ADMINISTRADOR SET ?', [dataNickname]);
-        }else{
-            const sendJugador = await pool.query('INSERT INTO JUGADOR SET ? ', [dataNickname]);
-        }
-    } catch (er) {
-        console.log(er);
+    usuario = new User();
+    usuario.setNombre(data.username);
+    usuario.setCorreo(data.email);
+    usuario.setContrasena(data.password);
+    usuario.setAdmin(data.check);
+    const result = await usuario.registrarUsuario();
+    res.json(result);
 
-    }
-    res.json({
-        res: "OK"
-    })
 })
 module.exports = router; 
