@@ -8,13 +8,15 @@ module.exports = {
     administrador: {
         host: "localhost", 
         user: 'ADMINISTRADOR', 
-        password: 'Administrador1', 
-        database: 'PROYECTO_FIS'
+        password: 'administrador', 
+        database: 'PROYECTO_FIS', 
+        insecureAuth : true
     }, 
     jugador: {
         host: "localhost", 
         user: 'JUGADOR', 
-        password: 'Jugador1', 
-        database: 'PROYECTO_FIS'
+        password: 'jugador', 
+        database: 'PROYECTO_FIS', 
+        insecureAuth : true
     }
 }

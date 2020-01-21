@@ -1,8 +1,7 @@
-const pool = require('../database/DBmanager');
-const helper = require('../helper/crypto');
-const generate = require('../helper/genarateString');
+var pool = require('../../database/DBmanager');
+const helper = require('../../helper/crypto');
+const generate = require('../../helper/genarateString');
 class User {
-
     id;
     nombre;
     contrasena;
@@ -15,11 +14,19 @@ class User {
         this.correo = '';
         this.nombre = '';
         this.contrasena = ''
-        this.admin = false;
+        this.admin = true;
         this.img = '';
     }
 
-
+    setConexion(admin) {
+        var conexion = null;
+        if (admin) {
+            conexion = require('../../database/DBmanager');
+        } else {
+            conexion = require('../database/DBgamer');
+        }
+        return conexion;
+    }
     async autenticarUsuario() {
         let data = {
             username: this.getNombre(),
@@ -58,6 +65,7 @@ class User {
         let result;
         do {
             idNickname = generate.getString(10);
+
             if (data.admin) {
                 result = await pool.query('SELECT ID FROM ADMINISTRADOR WHERE ID = ? ', [idNickname]);
             } else {
@@ -98,18 +106,22 @@ class User {
         };
         try {
             const consult = await pool.query('SELECT * FROM USUARIOS WHERE UPPER(username) = ?', [data.username.toUpperCase()]);
+            if (consult.length == 1) {
+                const consultDef = consult[0];
+
+                return {
+                    ID: consultDef.ID,
+                    USERNAME: consultDef.USERNAME,
+                    EMAIL: consultDef.EMAIL,
+                    ADMIN: consultDef.ADMIN,
+                    IMG: consultDef.IMG
+                };
+            }else{
+                return null;
+            }
         } catch (e) {
             console.log(e);
         }
-        const consultDef = consult[0];
-        console.log(consult);
-        return {
-            ID: consultDef.ID,
-            USERNAME: consultDef.USERNAME,
-            EMAIL: consultDef.EMAIL,
-            ADMIN: consultDef.ADMIN,
-            IMG: consultDef.IMG
-        };
     }
 
     actualizarUsuario() {
