@@ -1,31 +1,38 @@
 
 var pool = require('../../database/DBmanager');
 
-const User =  require('./usuario');
-class Jugador extends User{
+const User = require('./usuario');
+class Jugador extends User {
 
     id;
     nombre;
 
-    constructor(id, nombre){
-        this.id = id;
-        this.nombre = nombre;
-
-
-        pool.query()
+    constructor() {
+        this.id = '';
+        this.nombre = '';
     }
 
-    getId(){
+    getId() {
         return this.id;
     }
 
-    getNombre(){
+    getNombre() {
         return this.nombre;
     }
-    setId(id){
+    setId(id) {
         this.id = id;
     }
-    setNombre(nombre){
+    setNombre(nombre) {
         this.nombre = nombre
+    }
+
+    realizarActividad() {
+
+    }
+    realizarTutorial() {
+
+    }
+    obtenerJugador() {
+        return this;
     }
 }

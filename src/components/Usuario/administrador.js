@@ -5,9 +5,9 @@ class Administrador{
     id;
     nombre;
 
-    constructor(id, nombre){
-        this.id = id;
-        this.nombre = nombre;
+    constructor(){
+        this.id = '';
+        this.nombre = '';
     }
 
     getId(){
@@ -22,6 +22,13 @@ class Administrador{
     }
     setNombre(nombre){
         this.nombre = nombre
+    }
+
+    actualizarActividad(){
+
+    }
+    obtenerAdministrador(){
+        return this;
     }
 
 

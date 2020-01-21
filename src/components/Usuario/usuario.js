@@ -18,7 +18,7 @@ class User {
         this.img = '';
     }
 
-    setConexion(admin) {
+    /* setConexion(admin) {
         var conexion = null;
         if (admin) {
             conexion = require('../../database/DBmanager');
@@ -26,7 +26,7 @@ class User {
             conexion = require('../database/DBgamer');
         }
         return conexion;
-    }
+    } */
     async autenticarUsuario() {
         let data = {
             username: this.getNombre(),
@@ -53,6 +53,9 @@ class User {
         }
     }
 
+    destruirSesionDB(){
+        pool.destroy();
+    }
     async registrarUsuario() {
         let data = {
             username: this.getNombre(),
