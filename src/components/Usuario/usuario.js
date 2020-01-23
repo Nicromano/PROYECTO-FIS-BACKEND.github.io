@@ -63,6 +63,17 @@ class User {
             email: this.getCorreo(),
             admin: this.getAdmin()
         };
+        try{
+            const user_email = await this.consultarUsuario();
+            console.log(user_email);
+            if(user_email != null){
+                return {
+                    res: "USER_EXIST"
+                }
+            }
+        }catch(e){
+            console.log(e);
+        }
         data.password = helper.encrypt(data.password, data.username);
         var idNickname;
         let result;
@@ -105,13 +116,14 @@ class User {
     }
     async consultarUsuario() {
         let data = {
-            username: this.getNombre()
+            username: this.getNombre(), 
+            email: this.getCorreo()
         };
         try {
-            const consult = await pool.query('SELECT * FROM USUARIOS WHERE UPPER(username) = ?', [data.username.toUpperCase()]);
-            if (consult.length == 1) {
+            const consult = await pool.query('SELECT * FROM USUARIOS WHERE USERNAME = ? OR EMAIL = ?', [data.username, data.email]);
+            if (consult.length > 0) {
                 const consultDef = consult[0];
-
+                console.log(consult);
                 return {
                     ID: consultDef.ID,
                     USERNAME: consultDef.USERNAME,
