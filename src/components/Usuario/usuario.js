@@ -65,7 +65,6 @@ class User {
         };
         try{
             const user_email = await this.consultarUsuario();
-            console.log(user_email);
             if(user_email != null){
                 return {
                     res: "USER_EXIST"
@@ -91,6 +90,8 @@ class User {
             ID: idNickname,
             NICKNAME: data.username
         }
+
+
         const dataUser = {
             ID: idNickname,
             USERNAME: data.username,
@@ -108,6 +109,9 @@ class User {
             }
         } catch (er) {
             console.log(er);
+            return {
+                res: er
+            }
 
         }
         return {
