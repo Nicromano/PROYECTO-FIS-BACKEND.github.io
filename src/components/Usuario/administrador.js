@@ -53,6 +53,8 @@ class Administrador {
         //hacer los insert 
         const actividad_send = {
             id: id,
+            nombre: actividad.nombre, 
+            nivel: actividad.nivel, 
             tema: tema,
             numeros: numeros,
             respuesta: respuesta,

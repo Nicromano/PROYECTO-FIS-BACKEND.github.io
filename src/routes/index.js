@@ -2,11 +2,12 @@ const express = require('express');
 const router = express.Router();
 const User = require('../components/Usuario/usuario');
 const Administrador = require('../components/Usuario/administrador');
+const Actividad = require('../components/Actividad/Actividad');
 router.get('/', (req, res) => {
     res.send({
         res: "hola"
     })
-})
+});
 router.post('/signin', async (req, res) => {
     let data = req.body;
     usuario = new User();
@@ -15,21 +16,18 @@ router.post('/signin', async (req, res) => {
     const result = await usuario.autenticarUsuario();
     res.json(result);
 
-})
-
+});
 router.post('/sendImg', (req, res) => {
-
     console.log(req.body);
 
-})
+});
 router.post('/consultData', async (req, res) => {
     let data = req.body;
     usuario = new User();
     usuario.setNombre(data.username);
     const result = await usuario.consultarUsuario();
     res.json(result);
-
-})
+});
 
 router.post('/signup', async (req, res) => {
     let data = req.body;
@@ -40,8 +38,7 @@ router.post('/signup', async (req, res) => {
     usuario.setAdmin(data.admin);
     const result = await usuario.registrarUsuario();
     res.json(result);
-
-})
+});
 
 router.post('/agregarActividad', async (req, res) => {
     let data = req.body;
@@ -49,5 +46,13 @@ router.post('/agregarActividad', async (req, res) => {
     administrador.setId(data.idAdministrador);
     let result = await administrador.agregarActividad(data);
     res.json(result)
+});
+
+router.get('/ObtenerActividades', async (req, res)=>{
+
+        const actividades = await Actividad.obtenerActividades();
+        res.json(actividades)
 })
 module.exports = router; 
+
+

@@ -127,7 +127,6 @@ class User {
             const consult = await pool.query('SELECT * FROM USUARIOS WHERE USERNAME = ? OR EMAIL = ?', [data.username, data.email]);
             if (consult.length > 0) {
                 const consultDef = consult[0];
-                console.log(consult);
                 return {
                     ID: consultDef.ID,
                     USERNAME: consultDef.USERNAME,
