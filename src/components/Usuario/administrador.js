@@ -37,7 +37,7 @@ class Administrador {
             await pool.query('UPDATE ACTIVIDAD SET ? WHERE ID = ?', [data_actividad, id])
 
             console.log(consult[0]);
-            await pool.query('UPDATE TEMA SET ? WHERE ID = ?', [datos.tema, consult[0].TEMA]);
+            await pool.query('UPDATE TEMA SET ? WHERE ID = ?', [{ tema: datos.tema }, consult[0].TEMA]);
 
             let data_numeros = {
                 numero1: datos.Alternativa1,
@@ -46,11 +46,10 @@ class Administrador {
                 numero4: datos.Alternativa4
             }
             await pool.query('UPDATE NUMEROS SET ? WHERE ID = ?', [data_numeros, consult[0].NUMEROS]);
-            await pool.query('UPDATE RESPUESTA SET ? WHERE ID = ?', [datos.respuesta, consult[0].RESPUESTA]);
+            await pool.query('UPDATE RESPUESTA SET ? WHERE ID = ?', [{respuesta: datos.respuesta}, consult[0].RESPUESTA]);
             return {
                 res: 'UPDATE_ACTIVITY'
             }
-
         } catch (error) {
             console.log(error);
             return {
