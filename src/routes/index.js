@@ -57,14 +57,24 @@ router.get('/ObtenerActividades', async (req, res) => {
     res.json(actividades)
 });
 
-router.get('/obtenerActividad/:id', async(req, res)=>{
+router.get('/obtenerActividad/:id', async (req, res) => {
 
     let id = req.params.id;
     actividad = new Actividad();
 
     const consult = await actividad.obtenerActividades(id);
-    
+
     res.json(consult);
+})
+router.post('/actualizaActividad', async (req, res) => {
+
+    let datos = req.body.data;
+    let id = req.body.id;
+
+    administrador = new Administrador();
+    const resultado = await administrador.actualizarActividad(datos, id);
+    res.json(resultado);
+
 })
 
 router.get('/eliminarActividad/:id', async (req, res) => {

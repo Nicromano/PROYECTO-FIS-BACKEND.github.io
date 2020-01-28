@@ -24,14 +24,47 @@ class Administrador {
         this.nombre = nombre
     }
 
-    actualizarActividad() {
+    async actualizarActividad(datos, id) {
+
+
+        try {
+            const consult = await pool.query('SELECT TEMA, NUMEROS, RESPUESTA FROM ACTIVIDAD WHERE ID = ?', [id]);
+
+            let data_actividad = {
+                nombre: datos.nombre,
+                nivel: datos.nivel
+            }
+            await pool.query('UPDATE ACTIVIDAD SET ? WHERE ID = ?', [data_actividad, id])
+
+            console.log(consult[0]);
+            await pool.query('UPDATE TEMA SET ? WHERE ID = ?', [datos.tema, consult[0].TEMA]);
+
+            let data_numeros = {
+                numero1: datos.Alternativa1,
+                numero2: datos.Alternativa2,
+                numero3: datos.Alternativa3,
+                numero4: datos.Alternativa4
+            }
+            await pool.query('UPDATE NUMEROS SET ? WHERE ID = ?', [data_numeros, consult[0].NUMEROS]);
+            await pool.query('UPDATE RESPUESTA SET ? WHERE ID = ?', [datos.respuesta, consult[0].RESPUESTA]);
+            return {
+                res: 'UPDATE_ACTIVITY'
+            }
+
+        } catch (error) {
+            console.log(error);
+            return {
+                res: error
+            }
+        }
+
 
     }
     async eliminarActividad(id) {
 
         try {
             const ids = await pool.query('SELECT TEMA, NUMEROS, RESPUESTA FROM ACTIVIDAD WHERE ID = ? ', [id]);
-            console.log(ids[0], ids[0].TEMA );
+            console.log(ids[0], ids[0].TEMA);
             await pool.query('DELETE FROM ACTIVIDAD WHERE ID = ?', [id]);
             await pool.query('DELETE FROM TEMA WHERE ID = ?', [ids[0].TEMA]);
             await pool.query('DELETE FROM NUMEROS WHERE ID = ?', [ids[0].NUMEROS]);
@@ -70,8 +103,8 @@ class Administrador {
         //hacer los insert 
         const actividad_send = {
             id: id,
-            nombre: actividad.nombre, 
-            nivel: actividad.nivel, 
+            nombre: actividad.nombre,
+            nivel: actividad.nivel,
             tema: tema,
             numeros: numeros,
             respuesta: respuesta,
@@ -112,7 +145,7 @@ class Administrador {
             const send_numeros = await pool.query('INSERT INTO NUMEROS SET ?', [numeros_send])
             const send_respueta = await pool.query('INSERT INTO RESPUESTA SET ?', [respueta_send])
             const send_activity = await pool.query('INSERT INTO ACTIVIDAD SET ? ', [actividad_send]);
-            
+
         } catch (err) {
             console.log(err);
             return {
