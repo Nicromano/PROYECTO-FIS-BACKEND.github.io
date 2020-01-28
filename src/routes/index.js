@@ -3,6 +3,8 @@ const router = express.Router();
 const User = require('../components/Usuario/usuario');
 const Administrador = require('../components/Usuario/administrador');
 const Actividad = require('../components/Actividad/Actividad');
+
+
 router.get('/', (req, res) => {
     res.send({
         res: "hola"
@@ -48,11 +50,31 @@ router.post('/agregarActividad', async (req, res) => {
     res.json(result)
 });
 
-router.get('/ObtenerActividades', async (req, res)=>{
+router.get('/ObtenerActividades', async (req, res) => {
 
-        const actividades = await Actividad.obtenerActividades();
-        res.json(actividades)
+    actividad = new Actividad();
+    const actividades = await actividad.obtenerActividades(-1);
+    res.json(actividades)
+});
+
+router.get('/obtenerActividad/:id', async(req, res)=>{
+
+    let id = req.params.id;
+    actividad = new Actividad();
+
+    const consult = await actividad.obtenerActividades(id);
+    
+    res.json(consult);
 })
-module.exports = router; 
+
+router.get('/eliminarActividad/:id', async (req, res) => {
+    id = req.params.id;
+    administrador = new Administrador();
+    const response = await administrador.eliminarActividad(id);
+    console.log(response);
+    res.json(response);
+
+})
+module.exports = router;
 
 

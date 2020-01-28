@@ -27,7 +27,24 @@ class Administrador {
     actualizarActividad() {
 
     }
-    eliminarActividad() {
+    async eliminarActividad(id) {
+
+        try {
+            const ids = await pool.query('SELECT TEMA, NUMEROS, RESPUESTA FROM ACTIVIDAD WHERE ID = ? ', [id]);
+            console.log(ids[0], ids[0].TEMA );
+            await pool.query('DELETE FROM ACTIVIDAD WHERE ID = ?', [id]);
+            await pool.query('DELETE FROM TEMA WHERE ID = ?', [ids[0].TEMA]);
+            await pool.query('DELETE FROM NUMEROS WHERE ID = ?', [ids[0].NUMEROS]);
+            await pool.query('DELETE FROM RESPUESTA WHERE ID = ?', [ids[0].RESPUESTA]);
+
+            return {
+                res: 'DELETE_COMPLETE'
+            }
+        } catch (error) {
+            return {
+                res: error
+            }
+        }
 
     }
     async agregarActividad(actividad) {
