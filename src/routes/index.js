@@ -3,11 +3,12 @@ const router = express.Router();
 const User = require('../components/Usuario/usuario');
 const Administrador = require('../components/Usuario/administrador');
 const Actividad = require('../components/Actividad/Actividad');
+const Jugador  = require('../components/Usuario/jugador');
 
 
 router.get('/', (req, res) => {
     res.send({
-        res: "hola"
+        res: "holaaa"
     })
 });
 router.post('/signin', async (req, res) => {
@@ -19,10 +20,17 @@ router.post('/signin', async (req, res) => {
     res.json(result);
 
 });
-router.post('/sendImg', (req, res) => {
-    console.log(req.body);
+router.post('/realizaActividad', async (req, res) => {
 
+    let data = req.body;
+
+    jugador = new Jugador();
+    const result = await jugador.realizaActividad(data);
+
+    console.log(result);
+    res.json(result);
 });
+
 router.post('/consultData', async (req, res) => {
     let data = req.body;
     usuario = new User();
