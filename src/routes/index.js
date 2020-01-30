@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require('../components/Usuario/usuario');
 const Administrador = require('../components/Usuario/administrador');
 const Actividad = require('../components/Actividad/Actividad');
-const Jugador  = require('../components/Usuario/jugador');
+const Jugador = require('../components/Usuario/jugador');
 
 
 router.get('/', (req, res) => {
@@ -20,14 +20,19 @@ router.post('/signin', async (req, res) => {
     res.json(result);
 
 });
+
+router.get('/actividadesRealizadas', async (req, res) => {
+    let data = req.params.id;
+
+    actividad = new Actividad();
+    const resultado = await actividad.actividadesRealizadas(data);
+    res.json(resultado);
+
+})
 router.post('/realizaActividad', async (req, res) => {
-
     let data = req.body;
-
     jugador = new Jugador();
     const result = await jugador.realizaActividad(data);
-
-    console.log(result);
     res.json(result);
 });
 
@@ -69,16 +74,13 @@ router.get('/obtenerActividad/:id', async (req, res) => {
 
     let id = req.params.id;
     actividad = new Actividad();
-
     const consult = await actividad.obtenerActividades(id);
-
     res.json(consult);
 })
 router.post('/actualizaActividad', async (req, res) => {
 
     let datos = req.body.data;
     let id = req.body.id;
-
     administrador = new Administrador();
     const resultado = await administrador.actualizarActividad(datos, id);
     res.json(resultado);

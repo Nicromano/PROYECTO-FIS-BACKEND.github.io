@@ -28,7 +28,7 @@ class Actividad {
         this.nivel = nivel;
     }
 
-   async obtenerActividades(id) {
+    async obtenerActividades(id) {
         //Si el parametro envia es -1 consulta todas las actividades, caso contrario consulta la actividad efectudada por el id
         if (id == -1) {
             return await pool.query('SELECT * FROM ACTIVIDAD');
@@ -37,6 +37,17 @@ class Actividad {
 
     }
 
+    async actividadesRealizadas(idJugador) {
+        try {
+            return await pool.query('SELECT ACTIVIDAD FROM USUARIO_SELECCION WHERE JUGADOR = ?', [idJugador]);
+
+        } catch (error) {
+            return {
+                res: error
+            }
+        }
+    }
 }
+
 
 module.exports = Actividad;
