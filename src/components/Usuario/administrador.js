@@ -161,10 +161,7 @@ class Administrador {
 
 
     }
-    obtenerAdministrador() {
-        return this;
-    }
-
+    
 
 }
 

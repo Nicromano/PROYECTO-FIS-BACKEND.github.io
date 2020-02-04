@@ -18,15 +18,6 @@ class User {
         this.img = '';
     }
 
-    /* setConexion(admin) {
-        var conexion = null;
-        if (admin) {
-            conexion = require('../../database/DBmanager');
-        } else {
-            conexion = require('../database/DBgamer');
-        }
-        return conexion;
-    } */
     async autenticarUsuario() {
         let data = {
             username: this.getNombre(),
@@ -142,9 +133,7 @@ class User {
         }
     }
 
-    actualizarUsuario() {
-
-    }
+    
     setId(id) {
         this.id = id;
     }

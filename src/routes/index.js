@@ -21,11 +21,12 @@ router.post('/signin', async (req, res) => {
 
 });
 
-router.get('/actividadesRealizadas', async (req, res) => {
+router.get('/actividadesRealizadas/:id', async (req, res) => {
     let data = req.params.id;
 
     actividad = new Actividad();
     const resultado = await actividad.actividadesRealizadas(data);
+    
     res.json(resultado);
 
 })
@@ -91,7 +92,6 @@ router.get('/eliminarActividad/:id', async (req, res) => {
     id = req.params.id;
     administrador = new Administrador();
     const response = await administrador.eliminarActividad(id);
-    console.log(response);
     res.json(response);
 
 })
