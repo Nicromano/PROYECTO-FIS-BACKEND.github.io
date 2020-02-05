@@ -30,10 +30,11 @@ router.get('/actividadesRealizadas/:id', async (req, res) => {
     res.json(resultado);
 
 })
+
 router.post('/realizaActividad', async (req, res) => {
     let data = req.body;
-    jugador = new Jugador();
-    const result = await jugador.realizaActividad(data);
+    actividad = new Actividad();
+    const result = await actividad.realizaActividad(data);
     res.json(result);
 });
 
@@ -60,10 +61,9 @@ router.post('/agregarActividad', async (req, res) => {
     let data = req.body;
 
     console.log(data);
-    /* administrador = new Administrador();
-    administrador.setId(data.idAdministrador);
-    let result = await administrador.agregarActividad(data);
-    res.json(result) */
+    actividad = new Actividad();
+    let result = await actividad.agregarActividad(data);
+    res.json(result)
 });
 
 router.get('/ObtenerActividades', async (req, res) => {
@@ -84,16 +84,17 @@ router.post('/actualizaActividad', async (req, res) => {
 
     let datos = req.body.data;
     let id = req.body.id;
-    administrador = new Administrador();
-    const resultado = await administrador.actualizarActividad(datos, id);
+    console.log(datos, id)
+    actividad = new Actividad();
+    const resultado = await actividad.actualizarActividad(datos, id);
     res.json(resultado);
 
 })
 
 router.get('/eliminarActividad/:id', async (req, res) => {
     id = req.params.id;
-    administrador = new Administrador();
-    const response = await administrador.eliminarActividad(id);
+    actividad = new Actividad();
+    const response = await actividad.eliminarActividad(id);
     res.json(response);
 
 })
