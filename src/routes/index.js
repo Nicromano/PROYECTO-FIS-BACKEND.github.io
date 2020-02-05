@@ -58,10 +58,12 @@ router.post('/signup', async (req, res) => {
 
 router.post('/agregarActividad', async (req, res) => {
     let data = req.body;
-    administrador = new Administrador();
+
+    console.log(data);
+    /* administrador = new Administrador();
     administrador.setId(data.idAdministrador);
     let result = await administrador.agregarActividad(data);
-    res.json(result)
+    res.json(result) */
 });
 
 router.get('/ObtenerActividades', async (req, res) => {

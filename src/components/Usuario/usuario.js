@@ -171,7 +171,6 @@ class User {
     getImg() {
         return this.img;
     }
-
 }
 
 
