@@ -55,10 +55,10 @@ class User {
             admin: this.getAdmin()
         };
         try{
-            const user_email = await this.consultarUsuario();
+            const user_email = await this.consultarUsuario(null);
             if(user_email != null){
                 return {
-                    res: "USER_EXIST"
+                    res: "USER_NOT_EXIST"
                 }
             }
         }catch(e){
@@ -69,19 +69,10 @@ class User {
         let result;
         do {
             idNickname = generate.getString(10);
-
-            if (data.admin) {
-                result = await pool.query('SELECT ID FROM ADMINISTRADOR WHERE ID = ? ', [idNickname]);
-            } else {
-                result = await pool.query('SELECT ID FROM JUGADOR WHERE ID = ? ', [idNickname]);
-            }
-        } while (result.length == 1);
+            result = this.consultarUsuario(idNickname)
+        } while (result == null);
         result = null;
-        const dataNickname = {
-            ID: idNickname,
-            NICKNAME: data.username
-        }
-
+        
 
         const dataUser = {
             ID: idNickname,
@@ -93,11 +84,7 @@ class User {
         dataUser.EMAIL = dataUser.EMAIL.toLowerCase();
         try {
             const sendData = await pool.query('INSERT INTO USUARIOS SET ?', [dataUser]);
-            if (data.admin) {
-                const sendAdmin = await pool.query('INSERT INTO ADMINISTRADOR SET ?', [dataNickname]);
-            } else {
-                const sendJugador = await pool.query('INSERT INTO JUGADOR SET ? ', [dataNickname]);
-            }
+            
         } catch (er) {
             console.log(er);
             return {
@@ -109,13 +96,20 @@ class User {
             res: "OK"
         }
     }
-    async consultarUsuario() {
+    async consultarUsuario(id) {
         let data = {
             username: this.getNombre(), 
             email: this.getCorreo()
         };
+        let consult = null;
         try {
-            const consult = await pool.query('SELECT * FROM USUARIOS WHERE USERNAME = ? OR EMAIL = ?', [data.username, data.email]);
+
+            if(id == null){
+
+                 consult = await pool.query('SELECT * FROM USUARIOS WHERE USERNAME = ? OR EMAIL = ?', [data.username, data.email]);
+            }else{
+                consult = await pool.query('SELECT * FROM USUARIOS WHERE ID = ?', [id]);
+            }
             if (consult.length > 0) {
                 const consultDef = consult[0];
                 return {
@@ -126,6 +120,7 @@ class User {
                     IMG: consultDef.IMG
                 };
             }else{
+                
                 return null;
             }
         } catch (e) {
