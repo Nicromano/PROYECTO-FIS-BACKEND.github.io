@@ -58,7 +58,7 @@ class User {
             const user_email = await this.consultarUsuario(null);
             if(user_email != null){
                 return {
-                    res: "USER_NOT_EXIST"
+                    res: "USER_EXIST"
                 }
             }
         }catch(e){
