@@ -176,6 +176,20 @@ class Actividad {
             }
         }
     }
+    async actividadesCreadas(id){
+        let sql = "SELECT ID, NOMBRE, NIEVL FROM ACTIVIDAD WHERE ID = ?"
+
+        try {
+            const result = await pool.query(sql, [id])
+            return {
+                res: result
+            }
+        } catch (error) {
+            return {
+                res: error
+            }
+        }
+    }
 
     async consultarActividad(id) {
         try {

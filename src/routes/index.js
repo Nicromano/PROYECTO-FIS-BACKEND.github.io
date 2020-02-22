@@ -30,7 +30,9 @@ router.get('/actividadesRealizadas/:id', async (req, res) => {
     res.json(resultado);
 
 })
+router.get('/actividadesCreadas/:id', (req, res)=>{
 
+})
 router.post('/realizaActividad', async (req, res) => {
     let data = req.body;
     actividad = new Actividad();
